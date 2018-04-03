@@ -18,7 +18,7 @@ class Users {
         this.email = email;
     }
 
-    // getters setters
+    // ID
     get id() {
         try { validator.isNumber(this._id) } 
         catch(err) { throw new Error("{number} id should be a number") }
@@ -26,10 +26,9 @@ class Users {
         return this._id;
     }
 
-    set id(id) {
-        this._id = id;
-    }
+    set id(id) { this._id = id; }
 
+    // NAME
     get name() {
         try { validator.isNotEmptyString(this._name) }
         catch(err) { throw new Error("{string} name should not be empty") }
@@ -37,10 +36,9 @@ class Users {
         return this._name;
     }
 
-    set name(name) {
-        this._name = name
-    }
+    set name(name) { this._name = name }
 
+    // AGE
     get age() {
         try { validator.isNumber(this._age) }
         catch(err) { throw new Error("{number} age should be a number") }
@@ -48,10 +46,9 @@ class Users {
         return this._age;
     }
 
-    set age(age) {
-        this._age = age;
-    }
+    set age(age) { this._age = age; }
 
+    // EMAIL
     get email() {
         try { validator.isNotEmptyString(this._email) }
         catch(err) { throw new Error("{string} email should not be empty") }
@@ -59,11 +56,14 @@ class Users {
         return this._email;
     }
 
-    set email(email) {
-        this._email = email;
-    }
+    set email(email) { this._email = email; }
 
     save() {
+        // validate the user id with existing one
+        let index = this.findUserIndex();
+        if(~index)
+            throw new Error("User with the id: " + this.id + " already exist");
+
         // remove if the ist is longer than the max number of values
         if(Users._list.length > Users._max_users) {
             let diff = Users._list.length - Users._max_users;
@@ -72,19 +72,15 @@ class Users {
 
         // enter new user
         Users._list.push({
-            id: Users._id,
+            id: this.id,
             name: this.name,
             age: this.age,
             email: this.email
         });
-
-        Users._id++;
     }
 
     delete() {
-        let index = Users._list.findIndex((user) => {
-            return user.id === this.id
-        });
+        let index = this.findUserIndex();
 
         if(!(~index))
             throw new Error("User with the id: " + this.id + " doesn't exist");
@@ -93,7 +89,7 @@ class Users {
     }
 
     update() {
-        let index = this.findUserIndex()
+        let index = this.findUserIndex();
         
         if(!(~index))
             throw new Error("User by id " + this.id + " not found!");

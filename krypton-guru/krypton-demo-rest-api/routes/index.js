@@ -13,7 +13,7 @@ router.get('/users', (req, res, next) => {
 
 router.post('/user', (req, res, next) => {
     try{
-        let nUser = new Users(null, 
+        let nUser = new Users(req.body.id, 
             req.body.name, 
             req.body.age, 
             req.body.email);
