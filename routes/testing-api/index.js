@@ -62,7 +62,7 @@ router.all('/redirect/circular/302', function (req, res, next) {
  * gets organization name and employee name
  * if values are not passed 400 response will be returned
  */
-router.all('/url-param/:organization/:employeeName/', function(req, res, next) {
+router.all('/url-param/:organization/:employeeName', function(req, res, next) {
     if(!req.params.organization || !req.params.employeeName) {
         res
             .status(400)
@@ -78,6 +78,26 @@ router.all('/url-param/:organization/:employeeName/', function(req, res, next) {
         res.send({
             organization: req.params.organization,
             employeeName: req.params.employeeName
+        });
+    }
+})
+
+router.all('/query-param', function (req, res, next) {
+    if(!req.query.organization || !req.query.employeeName) {
+        res
+            .status(400)
+            .send(
+                `organization name and employee name should be passed to this end point
+                ex:- 
+                    'url-param/infor/nisala
+                `
+            );
+
+    } else {
+        res.status(200);
+        res.send({
+            organization: req.query.organization,
+            employeeName: req.query.employeeName
         });
     }
 })
