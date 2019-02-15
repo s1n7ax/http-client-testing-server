@@ -57,4 +57,27 @@ router.all('/redirect/circular/302', function (req, res, next) {
     res.end()
 })
 
+
+/**
+ * gets organization name and employee name
+ * if values are not passed 400 response will be returned
+ */
+router.all('url-param/:organization/:employeeName', function(req, res, next) {
+    if(!req.param.organization || !req.param.empName)
+        res
+            .status(400)
+            .send(
+                `organization name and employee name should be passed to this end point
+                ex:- 
+                    'url-param/infor/nisala
+                `
+            );
+    else
+        res.status(200);
+        res.send({
+            organization: req.param.organization,
+            employeeName: req.param.employeeName
+        });
+})
+
 module.exports = router
