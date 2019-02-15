@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var router = express.Router();
+var auth = require('basic-auth');
 
 
 /**
@@ -60,7 +61,6 @@ router.all('/redirect/circular/302', function (req, res, next) {
 
 /**
  * gets organization name and employee name
- * if values are not passed 400 response will be returned
  */
 router.all('/url-param/:organization/:employeeName', function(req, res, next) {
     if(!req.params.organization || !req.params.employeeName) {
@@ -69,7 +69,7 @@ router.all('/url-param/:organization/:employeeName', function(req, res, next) {
             .send(
                 `organization name and employee name should be passed to this end point
                 ex:- 
-                    'url-param/infor/nisala
+                    'url-param/infor/nisala'
                 `
             );
 
@@ -82,6 +82,10 @@ router.all('/url-param/:organization/:employeeName', function(req, res, next) {
     }
 })
 
+/**
+ * gets 'organization' and 'employeeName'
+ * if values are not passed, 400 response will be returned
+ */
 router.all('/query-param', function (req, res, next) {
     if(!req.query.organization || !req.query.employeeName) {
         res
@@ -89,7 +93,7 @@ router.all('/query-param', function (req, res, next) {
             .send(
                 `organization name and employee name should be passed to this end point
                 ex:- 
-                    'url-param/infor/nisala
+                    'url-param/infor/nisala'
                 `
             );
 
@@ -101,5 +105,22 @@ router.all('/query-param', function (req, res, next) {
         });
     }
 })
+
+/**
+ * This is for the browser authentication popup for basic authentication
+ * If the user and password is not 'krypton' 'krypton', you gets authentication popup
+ * Valid user will received 200 and 'Welcome' message as payload
+ */
+router.get('/authentication/auth-popup', function(req, res, next) {
+    let user = auth(req);
+
+    if (user === undefined || user['name'] !== 'krypton' || user['pass'] !== 'krypton') {
+        res.statusCode = 401
+        res.setHeader('WWW-Authenticate', 'Basic realm="Node"')
+        res.end('Unauthorized')
+    } else {
+        res.send("<h1>Welcome</h1>")
+    }
+});
 
 module.exports = router
