@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var router = express.Router();
 var auth = require('basic-auth');
+var qs = require('qs');
 
 
 /**
@@ -120,6 +121,29 @@ router.get('/authentication/auth-popup', function(req, res, next) {
         res.end('Unauthorized')
     } else {
         res.send("<h1>Welcome</h1>")
+    }
+})
+
+/**
+ * takes only x-www-form-urlencoded form data
+ */
+router.post('/form/login', function(req, res, next) {
+    console.log(`"${req.headers['content-type']}"`)
+
+    if(!req.headers['content-type'] === 'application/x-www-form-urlencoded') {
+        res.status(401)
+        res.end('allowed only content type: application/x-www-form-urlencoded data')
+
+    } else if(!req.body.username || !req.body.password){
+        res.status(401)
+        res.end('"username" and "password" values should be passed as form')
+
+    } else {
+        res.status(200)
+        res.send({
+            username: req.body.username,
+            password: req.body.password
+        }) 
     }
 });
 
