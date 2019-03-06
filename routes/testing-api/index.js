@@ -1,9 +1,23 @@
 var express = require('express');
-var path = require('path');
 var router = express.Router();
 var auth = require('basic-auth');
-var qs = require('qs');
 
+/**
+ * middleware functiion that to validate expected request method
+ * pass _method query parameter if you want to validate the method of the request againse the _method value
+ * 404 will be returned if the request does not match
+ */
+router.routeValidation = (req, res, next) => {
+    if(req.query._method) {
+        if(req.method.toUpperCase() !== req.query._method.toUpperCase()) {
+            res.sendStatus(404)
+            res.end();
+            return false;
+        }
+    }
+
+    return next();
+}
 
 /**
  * response 301 redirecion
