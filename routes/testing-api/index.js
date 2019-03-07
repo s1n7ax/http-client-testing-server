@@ -122,6 +122,51 @@ router.all('/query-param', function (req, res, next) {
 })
 
 /**
+ * gets 'organization' and 'employeeName' as json
+ * 
+ * sample:
+ * {"organization" : "org", "employeeName" : "keypton"}
+ * 
+ * 400 if invalid json is passed
+ * 
+ */
+router.all('/request-body', function(req, res, next) {
+   
+    if(!req.body || !req.body.organization || !req.body.employeeName) {
+        res.status(400)
+        res.write(`
+        request body expected from the request
+        body should contain organization and employeeName
+        ex:-
+        
+            {
+                "organization": "infor",
+                "employeeName": "krypton"
+            }
+        `)
+        res.end();
+        return
+    }
+
+    res.send(req.body);
+})
+
+/**
+ * validate customHeader value and return all the header values as the response
+ * IF customHeader is not passed request will be rejected as 400
+ */
+router.all('/headers', function (req, res, next) {
+    if(!req.get('customHeader')) {
+        res.status(400)
+        res.write(`Header value "customHeder" should be passed`);
+        res.end();
+        return;
+    }
+
+    res.send(req.headers);
+})
+
+/**
  * This is for the browser authentication popup for basic authentication
  * If the user and password is not 'krypton' 'krypton', you gets authentication popup
  * Valid user will received 200 and 'Welcome' message as payload
@@ -142,7 +187,6 @@ router.get('/authentication/auth-popup', function(req, res, next) {
  * takes only x-www-form-urlencoded form data
  */
 router.post('/form/login', function(req, res, next) {
-    console.log(`"${req.headers['content-type']}"`)
 
     if(!req.headers['content-type'] === 'application/x-www-form-urlencoded') {
         res.status(401)
@@ -160,5 +204,6 @@ router.post('/form/login', function(req, res, next) {
         }) 
     }
 });
+
 
 module.exports = router
