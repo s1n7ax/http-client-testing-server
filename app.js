@@ -21,7 +21,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(allowCORS) 
 
+app.use('*', allowCORS);
 app.use('/', index);
 app.use('/testing-api',testingAPI.routeValidation, testingAPI);
 
@@ -42,5 +44,25 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+function allowCORS(req, res, next) {
+  if(req.method === "OPTIONS") {
+    res.set('Access-Control-Allow-Origin', '*')
+    res.set('Access-Control-Allow-Credentials', true)
+    res.set( 'Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
+    res.set('Access-Control-Allow-Headers', 'Content-Type')
+    res.status(200).end()
+    return;
+  }
+
+  res.set('Access-Control-Allow-Origin', '*')
+  res.set('Access-Control-Allow-Credentials', true)
+  res.set( 'Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
+  res.set('Access-Control-Allow-Headers', 'Content-Type')
+
+  next();
+
+}
 
 module.exports = app;
