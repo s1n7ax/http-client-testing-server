@@ -130,9 +130,10 @@ router.all('/query-param', function (req, res, next) {
  * 400 if invalid json is passed
  * 
  */
-router.all('/request-body', function(req, res, next) {
-   
+router.all('/payload', function(req, res, next) {
+  
     if(!req.body || !req.body.organization || !req.body.employeeName) {
+
         res.status(400)
         res.write(`
         request body expected from the request
@@ -147,8 +148,8 @@ router.all('/request-body', function(req, res, next) {
         res.end();
         return
     }
-
-    res.send(req.body);
+    
+    res.send(req.body)
 })
 
 /**
