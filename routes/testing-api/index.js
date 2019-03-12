@@ -154,18 +154,41 @@ router.all('/json-payload', function(req, res, next) {
 
 /**
  * gets any type of payload and will be read as utl8 encoding
+ * request will timout after 5 seconds
  */
 router.all('/payload', (req, res, next) => {
+    let reqHandled = false;
+    let data = ''
     req.setEncoding('utf8')
-    req.on('data', (data) => {
+
+    req.on('data', (_data) => {
+        data += _data;
+        console.log('data: ' + data)
+    })
+
+    req.on('end', () => {
+        if(reqHandled)
+            return;
+        
+        reqHandled = true
         if(data) {
-            res.send(data);
+            res.send(data)
+        } else {
+            res.status(400)
+            res.write(`request data should be sent with the request`)
+            res.end()
         }
     })
     
-    res.status(400)
-    res.write(`request data should be sent with the request`)
-    res.end()
+    setTimeout(() => {
+        if(reqHandled) 
+            return;
+
+        reqHandled = true;
+        res.status(400)
+        res.write('requst timeout took too long to process or application/json request type')
+        res.end();
+    }, 500)
 });
 
 /**
