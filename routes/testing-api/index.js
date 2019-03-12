@@ -130,7 +130,7 @@ router.all('/query-param', function (req, res, next) {
  * 400 if invalid json is passed
  * 
  */
-router.all('/payload', function(req, res, next) {
+router.all('/json-payload', function(req, res, next) {
   
     if(!req.body || !req.body.organization || !req.body.employeeName) {
 
