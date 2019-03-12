@@ -122,7 +122,7 @@ router.all('/query-param', function (req, res, next) {
 })
 
 /**
- * gets 'organization' and 'employeeName' as json
+ * gets 'organization' and 'employeeName' as json payload
  * 
  * sample:
  * {"organization" : "org", "employeeName" : "keypton"}
@@ -151,6 +151,22 @@ router.all('/json-payload', function(req, res, next) {
     
     res.send(req.body)
 })
+
+/**
+ * gets any type of payload and will be read as utl8 encoding
+ */
+router.all('/payload', (req, res, next) => {
+    req.setEncoding('utf8')
+    req.on('data', (data) => {
+        if(data) {
+            res.send(data);
+        }
+    })
+    
+    res.status(400)
+    res.write(`request data should be sent with the request`)
+    res.end()
+});
 
 /**
  * validate customHeader value and return all the header values as the response
