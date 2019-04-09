@@ -131,6 +131,10 @@ router.all('/query-param', function (req, res, next) {
  * 
  */
 router.all('/json-payload', function(req, res, next) {
+    if(req.query.customBody === 'true') {
+        res.send(req.body);
+        return;
+    }
   
     if(!req.body || !req.body.organization || !req.body.employeeName) {
 
@@ -150,7 +154,7 @@ router.all('/json-payload', function(req, res, next) {
     }
     
     res.send(req.body)
-})
+});
 
 /**
  * gets any type of payload and will be read as utl8 encoding
