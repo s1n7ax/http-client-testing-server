@@ -210,6 +210,15 @@ router.all('/headers', function (req, res, next) {
     res.send(req.headers);
 })
 
+router.all('/random/*?', function(req, res, next) {
+    res.send({
+        header: req.headers,
+        query: req.query,
+        param: req.params,
+        body: req.body
+    });
+});
+
 /**
  * This is for the browser authentication popup for basic authentication
  * If the user and password is not 'krypton' 'krypton', you gets authentication popup
