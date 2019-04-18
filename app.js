@@ -50,16 +50,16 @@ function allowCORS(req, res, next) {
   if(req.method === "OPTIONS") {
     res.set('Access-Control-Allow-Origin', '*')
     res.set('Access-Control-Allow-Credentials', true)
-    res.set( 'Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-    res.set('Access-Control-Allow-Headers', 'Content-Type')
+    res.set( 'Access-Control-Allow-Methods', '*')
+    res.set('Access-Control-Allow-Headers', '*')
     res.status(200).end()
     return;
   }
 
   res.set('Access-Control-Allow-Origin', '*')
   res.set('Access-Control-Allow-Credentials', true)
-  res.set( 'Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-  res.set('Access-Control-Allow-Headers', 'Content-Type')
+  res.set( 'Access-Control-Allow-Methods', '*')
+  res.set('Access-Control-Allow-Headers', '*')
 
   next();
 
